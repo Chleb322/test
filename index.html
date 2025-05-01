@@ -3,16 +3,128 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Demo mObywatel - Dowód</title>
+  <title>mObywatel - Demo Generator</title>
   <style>
-    /* Tutaj wklej stylizację CSS z poprzedniego przykładu */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9fafb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    header {
+      width: 100%;
+      background-color: #1f2937;
+      color: white;
+      padding: 1rem;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-top: 2rem;
+    }
+    .field { margin-bottom: 1rem; }
+    .label { font-size: 0.85rem; color: #555; }
+    .value { font-size: 1.1rem; font-weight: bold; color: #111; }
+    .photo {
+      width: 100px;
+      height: 120px;
+      background-color: #ccc;
+      text-align: center;
+      line-height: 120px;
+      color: #666;
+      float: right;
+      margin-left: 1rem;
+      border-radius: 6px;
+    }
+    .button {
+      margin-top: 1rem;
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .button:hover { background-color: #1e40af; }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: #999;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <!-- Tutaj wklej strukturę HTML z poprzedniego przykładu -->
-  <script>
-    // Tutaj wklej skrypt JavaScript z poprzedniego przykładu
-  </script>
+
+<header>mObywatel - Demo Dowód Osobisty</header>
+
+<div class="card">
+  <div class="photo">Zdjęcie</div>
+  <div class="field">
+    <div class="label">Imię i nazwisko</div>
+    <div class="value" id="name">Jan Kowalski</div>
+  </div>
+  <div class="field">
+    <div class="label">PESEL</div>
+    <div class="value" id="pesel">90010112345</div>
+  </div>
+  <div class="field">
+    <div class="label">Seria i numer</div>
+    <div class="value" id="series">ABA123456</div>
+  </div>
+  <div class="field">
+    <div class="label">Data ważności</div>
+    <div class="value" id="expiry">2033-12-31</div>
+  </div>
+
+  <button class="button" onclick="generate()">Wygeneruj nowy</button>
+</div>
+
+<footer>To tylko wersja demonstracyjna. Nie służy jako prawdziwy dokument.</footer>
+
+<script>
+  const names = ["Jan", "Anna", "Michał", "Katarzyna", "Piotr", "Agnieszka"];
+  const surnames = ["Kowalski", "Nowak", "Wiśniewski", "Wójcik", "Kaczmarek", "Mazur"];
+
+  function randomDate(start, end) {
+    const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    return date.toISOString().split('T')[0];
+  }
+
+  function randomPESEL() {
+    const year = 1950 + Math.floor(Math.random() * 60);
+    const month = String(1 + Math.floor(Math.random() * 12)).padStart(2, '0');
+    const day = String(1 + Math.floor(Math.random() * 28)).padStart(2, '0');
+    const rest = String(Math.floor(1000 + Math.random() * 8999));
+    return `${year.toString().slice(2)}${month}${day}${rest}`;
+  }
+
+  function randomSeries() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    return Array(3).fill().map(() => letters[Math.floor(Math.random() * letters.length)]).join('') +
+           String(Math.floor(100000 + Math.random() * 899999));
+  }
+
+  function generate() {
+    const name = names[Math.floor(Math.random() * names.length)];
+    const surname = surnames[Math.floor(Math.random() * surnames.length)];
+    document.getElementById("name").innerText = `${name} ${surname}`;
+    document.getElementById("pesel").innerText = randomPESEL();
+    document.getElementById("series").innerText = randomSeries();
+    document.getElementById("expiry").innerText = randomDate(new Date(2028, 0, 1), new Date(2038, 11, 31));
+  }
+</script>
+
 </body>
 </html>
- Dodaj plik index.html
