@@ -16,12 +16,12 @@
 </body>
 </html>
 
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>mObywatel - Demo Generator</title>
+  <title>mObywatel - Własny Dowód Demo</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -44,7 +44,7 @@
       background: white;
       border-radius: 12px;
       padding: 1.5rem;
-      max-width: 400px;
+      max-width: 500px;
       width: 100%;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       margin-top: 2rem;
@@ -56,12 +56,9 @@
       width: 100px;
       height: 120px;
       background-color: #ccc;
-      text-align: center;
-      line-height: 120px;
-      color: #666;
-      float: right;
-      margin-left: 1rem;
+      object-fit: cover;
       border-radius: 6px;
+      margin-bottom: 1rem;
     }
     .button {
       margin-top: 1rem;
@@ -75,6 +72,13 @@
       cursor: pointer;
     }
     .button:hover { background-color: #1e40af; }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 0.25rem;
+    }
     footer {
       margin-top: 2rem;
       font-size: 0.8rem;
@@ -85,62 +89,72 @@
 </head>
 <body>
 
-<header>mObywatel - Demo Dowód Osobisty</header>
+<header>mObywatel - Własny Dowód Demo</header>
 
 <div class="card">
-  <div class="photo">Zdjęcie</div>
+  <div class="field">
+    <div class="label">Zdjęcie (URL)</div>
+    <input type="text" id="photoUrl" placeholder="Wklej link do zdjęcia">
+  </div>
+  <img id="photo" class="photo" src="" alt="Twoje zdjęcie">
+
   <div class="field">
     <div class="label">Imię i nazwisko</div>
-    <div class="value" id="name">Jan Kowalski</div>
+    <input type="text" id="nameInput" placeholder="np. Jan Kowalski">
   </div>
   <div class="field">
     <div class="label">PESEL</div>
-    <div class="value" id="pesel">90010112345</div>
+    <input type="text" id="peselInput" placeholder="np. 90010112345">
+  </div>
+  <div class="field">
+    <div class="label">Data urodzenia</div>
+    <input type="date" id="dobInput">
+  </div>
+  <div class="field">
+    <div class="label">Seria i numer dowodu</div>
+    <input type="text" id="seriesInput" placeholder="np. ABC123456">
+  </div>
+
+  <button class="button" onclick="updateCard()">Zaktualizuj dowód</button>
+</div>
+
+<div class="card" style="margin-top: 1.5rem;">
+  <div class="section-title" style="margin-bottom: 1rem; font-weight: bold;">Twój Dowód Demo</div>
+  <img id="cardPhoto" class="photo" src="" alt="Zdjęcie">
+  <div class="field">
+    <div class="label">Imię i nazwisko</div>
+    <div class="value" id="cardName">---</div>
+  </div>
+  <div class="field">
+    <div class="label">PESEL</div>
+    <div class="value" id="cardPESEL">---</div>
+  </div>
+  <div class="field">
+    <div class="label">Data urodzenia</div>
+    <div class="value" id="cardDOB">---</div>
   </div>
   <div class="field">
     <div class="label">Seria i numer</div>
-    <div class="value" id="series">ABA123456</div>
+    <div class="value" id="cardSeries">---</div>
   </div>
-  <div class="field">
-    <div class="label">Data ważności</div>
-    <div class="value" id="expiry">2033-12-31</div>
-  </div>
-
-  <button class="button" onclick="generate()">Wygeneruj nowy</button>
 </div>
 
-<footer>To tylko wersja demonstracyjna. Nie służy jako prawdziwy dokument.</footer>
+<footer>To tylko wersja demonstracyjna. Nie jest dokumentem tożsamości.</footer>
 
 <script>
-  const names = ["Jan", "Anna", "Michał", "Katarzyna", "Piotr", "Agnieszka"];
-  const surnames = ["Kowalski", "Nowak", "Wiśniewski", "Wójcik", "Kaczmarek", "Mazur"];
+  function updateCard() {
+    const name = document.getElementById("nameInput").value;
+    const pesel = document.getElementById("peselInput").value;
+    const dob = document.getElementById("dobInput").value;
+    const series = document.getElementById("seriesInput").value;
+    const photoUrl = document.getElementById("photoUrl").value;
 
-  function randomDate(start, end) {
-    const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-    return date.toISOString().split('T')[0];
-  }
-
-  function randomPESEL() {
-    const year = 1950 + Math.floor(Math.random() * 60);
-    const month = String(1 + Math.floor(Math.random() * 12)).padStart(2, '0');
-    const day = String(1 + Math.floor(Math.random() * 28)).padStart(2, '0');
-    const rest = String(Math.floor(1000 + Math.random() * 8999));
-    return `${year.toString().slice(2)}${month}${day}${rest}`;
-  }
-
-  function randomSeries() {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    return Array(3).fill().map(() => letters[Math.floor(Math.random() * letters.length)]).join('') +
-           String(Math.floor(100000 + Math.random() * 899999));
-  }
-
-  function generate() {
-    const name = names[Math.floor(Math.random() * names.length)];
-    const surname = surnames[Math.floor(Math.random() * surnames.length)];
-    document.getElementById("name").innerText = `${name} ${surname}`;
-    document.getElementById("pesel").innerText = randomPESEL();
-    document.getElementById("series").innerText = randomSeries();
-    document.getElementById("expiry").innerText = randomDate(new Date(2028, 0, 1), new Date(2038, 11, 31));
+    document.getElementById("cardName").innerText = name || '---';
+    document.getElementById("cardPESEL").innerText = pesel || '---';
+    document.getElementById("cardDOB").innerText = dob || '---';
+    document.getElementById("cardSeries").innerText = series || '---';
+    document.getElementById("cardPhoto").src = photoUrl || "";
+    document.getElementById("photo").src = photoUrl || "";
   }
 </script>
 
